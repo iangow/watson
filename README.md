@@ -20,7 +20,7 @@ Only rows not found in the existing table are processed. This is done for two re
 Converts the raw output found in `watson_output_raw` into a "wide" format and adds fields from `watson_input`.
 Results are stored in `watson_output_alt`. 
 
-## personalityinsights.py
+## `personalityinsights.py`
 
 This file contains the main class to submit text to the IBM Watson
 Personality Insights service. 
