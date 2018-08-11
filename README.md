@@ -23,7 +23,8 @@ Results are stored in `watson_output_alt`.
 ## personalityinsights.py
 
 This file contains the main class to submit text to the IBM Watson
-Personality Insights service.
+Personality Insights service. 
+For this to work, you will need to install the Python bindings for this service, found [here](https://github.com/watson-developer-cloud/personality-insights-python).
 
 An example of usage:
 ``` Python
