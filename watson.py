@@ -1,3 +1,6 @@
+import json
+import pandas as pd
+
 def get_scores(d):
     '''
     Extracts scores from a dictionary

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 conn_string = "postgresql://aaz.chicagobooth.edu:5432/postgres"
 
+import pandas as pd
 import json 
 from sqlalchemy import create_engine
 
