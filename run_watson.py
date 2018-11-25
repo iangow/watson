@@ -16,9 +16,9 @@ def get_input():
     print('Obtaining texts from the database...')
     sql_input = """
         SELECT hash, text
-        FROM personality.watson_input
+        FROM big5.watson_input
         -- LIMIT 5
-        WHERE hash NOT IN (SELECT hash FROM personality.watson_output_raw)
+        WHERE hash NOT IN (SELECT hash FROM big5.watson_output_raw)
     """
     #%%
     
@@ -41,4 +41,4 @@ if texts.shape[0] > 0:
     
     db_engine = create_engine(conn_string)
     df = texts.drop(['text'], axis=1)
-    df.to_sql("watson_output_raw", db_engine, "personality", if_exists = 'append', index = False)
+    df.to_sql("watson_output_raw", db_engine, "big5", if_exists = 'append', index = False)
