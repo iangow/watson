@@ -26,6 +26,13 @@ This file contains the main class to submit text to the IBM Watson
 Personality Insights service. 
 For this to work, you will need to install the Python bindings for this service, found [here](https://github.com/watson-developer-cloud/personality-insights-python).
 
+I installed this using Pip.
+It seems that the code does not work for the current version, so I installed v.1.0.2. this:
+
+```bash
+sudo pip install watson-developer-cloud==1.0.2
+```
+
 An example of usage:
 ``` Python
 from personalityinsights import PersonalityInsights as PI
