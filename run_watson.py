@@ -4,7 +4,7 @@ import pandas as pd
 
 from sqlalchemy import create_engine
 
-conn_string = "postgresql://aaz.chicagobooth.edu:5432/postgres"
+conn_string = "postgresql://aaz2.chicagobooth.edu:5432/postgres"
 
 def get_input():
     db_engine = create_engine(conn_string)
