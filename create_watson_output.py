@@ -5,10 +5,12 @@ conn_string = "postgresql://aaz2.chicagobooth.edu:5432/postgres"
 import pandas as pd
 import json 
 from sqlalchemy import create_engine
-
+from datetime import datetime as dt
 from watson import extract_scores, expand_json
 
 db_engine = create_engine(conn_string)
+db_schema = "big5"
+db_table = "watson_output"
 
 sql = """
     SELECT company_id, executive_id, file_name, profile
@@ -22,5 +24,20 @@ df = pd.read_sql(sql, db_engine)
 df['scores'] = df['profile'].map(lambda x: extract_scores(x))
 df_mod = expand_json(df.drop(['profile'], axis=1), 'scores')
 
-df_mod.to_sql("watson_output_alt", db_engine, "big5", 
+df_mod.to_sql(db_table, db_engine, schema = db_schema, 
               if_exists = 'replace', index = False)
+              
+db_comment = 'CREATED USING GitHub:iangow/watson/watson.py ON ' + \
+              dt.today().strftime('%m/%d/%Y') + '.'
+
+db_comment = 'CREATED USING GitHub:iangow/watson/watson.py ON ' + \
+              dt.today().strftime('%m/%d/%Y') + '.'
+
+sql = "COMMENT ON TABLE " + db_schema  + "." + db_table + " IS '" + db_comment + "';"
+db_engine.execute(sql)
+sql = 'ALTER TABLE '  + db_schema  + "." + db_table + ' OWNER TO ' + db_schema
+db_engine.execute(sql)
+sql = 'GRANT SELECT ON '  + db_schema  + "." + db_table + ' TO ' + db_schema + '_access'
+db_engine.execute(sql)
+
+db_engine.dispose()
