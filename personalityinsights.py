@@ -3,7 +3,6 @@
 
 """
 This module works with IBM Watson Personality Insights
-The module supports caching of the results returned by the service
 
 @author: vadim, iangow
 """
@@ -64,4 +63,3 @@ class PersonalityInsights:
             json_data = { 'error': str(e) }
             pass
         return json.dumps(json_data)
-
