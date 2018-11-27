@@ -26,18 +26,20 @@ df_mod = expand_json(df.drop(['profile'], axis=1), 'scores')
 
 df_mod.to_sql(db_table, db_engine, schema = db_schema, 
               if_exists = 'replace', index = False)
-              
-db_comment = 'CREATED USING GitHub:iangow/watson/watson.py ON ' + \
-              dt.today().strftime('%m/%d/%Y') + '.'
 
+# Add table comment              
 db_comment = 'CREATED USING GitHub:iangow/watson/watson.py ON ' + \
-              dt.today().strftime('%m/%d/%Y') + '.'
+              dt.utcnow().strftime('%Y-%m-%d %T UTC') + '.'
 
 sql = "COMMENT ON TABLE " + db_schema  + "." + db_table + " IS '" + db_comment + "';"
-db_engine.execute(sql)
+connection = db_engine.connect()
+trans = connection.begin()
+connection.execute(sql)
+trans.commit()
+connection.close()
+
+# Fix permissions
 sql = 'ALTER TABLE '  + db_schema  + "." + db_table + ' OWNER TO ' + db_schema
 db_engine.execute(sql)
 sql = 'GRANT SELECT ON '  + db_schema  + "." + db_table + ' TO ' + db_schema + '_access'
 db_engine.execute(sql)
-
-db_engine.dispose()
