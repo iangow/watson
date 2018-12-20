@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-conn_string = "postgresql://aaz2.chicagobooth.edu:5432/postgres"
+from run_watson import conn_string
 
 import pandas as pd
 import json 

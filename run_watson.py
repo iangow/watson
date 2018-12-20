@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import pandas as pd
-
 from sqlalchemy import create_engine
 
-conn_string = "postgresql://aaz2.chicagobooth.edu:5432/postgres"
+pghost = "aaz2.chicagobooth.edu"
+pgdatabase = "postgres"
+conn_string = "postgresql://" + pghost + ":5432/" + pgdatabase
 
 def get_input():
     db_engine = create_engine(conn_string)
@@ -32,13 +33,14 @@ def get_input():
     db_engine = None
     return texts 
 
-texts = get_input()
+if __name__=="__main__":
+    texts = get_input()
 
-if texts.shape[0] > 0:
-    from personalityinsights import PersonalityInsights as PI
-    pi = PI()
-    texts['profile'] = texts['text'].map(lambda x: pi.get_profile(x))
-    
-    db_engine = create_engine(conn_string)
-    df = texts.drop(['text'], axis=1)
-    df.to_sql("watson_output_raw", db_engine, "big5", if_exists = 'append', index = False)
+    if texts.shape[0] > 0:
+        from personalityinsights import PersonalityInsights as PI
+        pi = PI()
+        texts['profile'] = texts['text'].map(lambda x: pi.get_profile(x))
+
+        db_engine = create_engine(conn_string)
+        df = texts.drop(['text'], axis=1)
+        df.to_sql("watson_output_raw", db_engine, "big5", if_exists = 'append', index = False)
