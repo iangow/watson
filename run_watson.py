@@ -17,8 +17,10 @@ def get_input():
     print('Obtaining texts from the database...')
     sql_input = """
         SELECT hash, text
+        FROM big5.watson_input_agg
+        UNION 
+        SELECT hash, text
         FROM big5.watson_input
-        -- LIMIT 5
         WHERE hash NOT IN (SELECT hash FROM big5.watson_output_raw)
     """
     #%%
