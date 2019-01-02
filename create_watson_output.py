@@ -13,11 +13,9 @@ db_schema = "big5"
 db_table = "watson_output"
 
 sql = """
-    SELECT company_id, executive_id, file_name, profile
+    SELECT hash, profile
     FROM big5.watson_output_raw
-    INNER JOIN big5.watson_input
-    USING (hash)
-    """
+"""
     
 df = pd.read_sql(sql, db_engine)
 
