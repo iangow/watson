@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 from sqlalchemy import create_engine
+from os import getenv
 
-pghost = "aaz2.chicagobooth.edu"
-pgdatabase = "postgres"
+pghost = getenv("PGHOST")
+pgdatabase =  getenv("PGDATABASE")
 conn_string = "postgresql://" + pghost + ":5432/" + pgdatabase
 
 def get_input():
