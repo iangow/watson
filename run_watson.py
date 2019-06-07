@@ -3,6 +3,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from os import getenv
+from sqlalchemy.dialects.postgresql import JSONB
 
 pghost = getenv("PGHOST")
 pgdatabase =  getenv("PGDATABASE")
@@ -16,15 +17,24 @@ def get_input():
     print('Creating the database connection...')
     
     print('Obtaining texts from the database...')
-    sql_input = """
-        SELECT hash, text
-        FROM big5.watson_input_agg
-        UNION 
-        SELECT hash, text
-        FROM big5.watson_input
-        WHERE hash NOT IN (SELECT hash FROM big5.watson_output_raw)
-    """
-    #%%
+    table_exists = db_engine.dialect.has_table(db_engine, "watson_output_raw", schema="big5")
+    if table_exists:
+        sql_input = """
+            SELECT hash, text
+            FROM big5.watson_input_agg
+            UNION 
+            SELECT hash, text
+            FROM big5.watson_input
+            WHERE hash NOT IN (SELECT hash FROM big5.watson_output_raw)
+        """
+    else:
+        sql_input = """
+            SELECT hash, text
+            FROM big5.watson_input_agg
+            UNION 
+            SELECT hash, text
+            FROM big5.watson_input
+        """
     
     texts = pd.read_sql(sql_input, db_engine)
     if not len(texts):
@@ -46,4 +56,5 @@ if __name__=="__main__":
 
         db_engine = create_engine(conn_string)
         df = texts.drop(['text'], axis=1)
-        df.to_sql("watson_output_raw", db_engine, "big5", if_exists = 'append', index = False)
+        df.to_sql("watson_output_raw", db_engine, "big5", if_exists = 'append', index = False,
+                   dtype={'profile': JSONB})
